@@ -1,0 +1,36 @@
+server:
+  port: 5100
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: API-IMAGESAVE
+          uri: lb://223.130.137.35:8100/
+          #uri: lb://192.168.1.6:8100/
+          predicates:
+            - Path=/**
+        - id: API-IMAGESAVE
+          uri: lb://223.130.138.26:8100/
+          #uri: http://223.130.138.26:8100/
+          predicates:
+            - Path=/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://175.45.193.224:5100"
+            allow-credentials: true
+            allowedHeaders: "*"
+            allowedMethods: "*"
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://223.130.163.83:8761/eureka/
